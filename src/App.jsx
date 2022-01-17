@@ -3,14 +3,23 @@ import FirstPage from './components/FirstPage';
 import Question from './components/Question';
 
 const App = () => {
-  const [quiz, setQuiz] = React.useState({ state: false, questions: [] });
+  const [quiz, setQuiz] = React.useState({
+    state: false,
+    questions: [],
+    answers: [],
+    correctAnswers: 0,
+    done: false,
+  });
 
   React.useEffect(() => {
     fetch('https://opentdb.com/api.php?amount=5')
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        setQuiz((prevState) => ({ ...prevState, questions: data.results }));
+        setQuiz((prevState) => ({
+          ...prevState,
+          questions: data.results,
+          answers: new Array(data.results.length),
+        }));
       });
   }, []);
 
@@ -20,21 +29,56 @@ const App = () => {
     setQuiz((prevState) => ({ ...prevState, state: !prevState.state }));
   }
 
+  function selectAnswer(questionNum, answer) {
+    setQuiz((prevState) => {
+      const newAnswersArray = [...prevState.answers];
+      newAnswersArray[questionNum] = answer;
+      return {
+        ...prevState,
+        answers: newAnswersArray,
+      };
+    });
+  }
+
+  function checkAnswers() {
+    const numOfCorrectAnswers = quiz.answers.reduce((acc, el, index) => {
+      return el === quiz.questions[index].correct_answer ? ++acc : acc;
+    }, 0);
+    setQuiz((prevState) => ({
+      ...prevState,
+      correctAnswers: numOfCorrectAnswers,
+      done: !prevState.done,
+    }));
+  }
+
+  const questoins = quiz.questions.map((item, i) => (
+    <Question
+      key={i}
+      item={item}
+      selectAnswer={selectAnswer}
+      questionNum={i}
+      answers={quiz.answers}
+    />
+  ));
+
   return (
     <>
       {!quiz.state && <FirstPage onStartQuiz={onStartQuiz} />}
-      {quiz.state && (
-        <main className="quiz-container">
-          <Question />
-          <Question />
-          <Question />
-          <Question />
-          <Question />
-        </main>
-      )}
-      {quiz.state && (
+      {quiz.state && <main className="quiz-container">{questoins}</main>}
+      {quiz.state && !quiz.done && (
         <footer>
-          <button className="btn btn-info">Check Answers</button>
+          <button className="btn btn-info" onClick={checkAnswers}>
+            Check Answers
+          </button>
+        </footer>
+      )}
+      {quiz.state && quiz.done && (
+        <footer>
+          <p>
+            You scored {quiz.correctAnswers} / {quiz.questions.length} correct
+            answers
+          </p>
+          <button className="btn btn-info">Play Again</button>
         </footer>
       )}
     </>
@@ -42,3 +86,9 @@ const App = () => {
 };
 
 export default App;
+
+// 1. подсвет правильных ответов
+// 2. отключение кнопок после проверки
+// 3. окончание игры
+// 4. перезапуск новой игры
+// 5. оптимизация кода

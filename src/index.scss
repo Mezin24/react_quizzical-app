@@ -114,10 +114,22 @@ body {
   }
 
   &.selected {
-    background: #d6dbf5;
+    background: #94d7a2;
   }
 }
 
 footer {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  p {
+    font-family: Inter;
+    font-weight: bold;
+    font-size: 12.8px;
+    line-height: 15px;
+    color: #293264;
+  }
 }

@@ -113,6 +113,9 @@ body {
     transform: scale(1);
   }
 
+  &.correct {
+    background: #f8bcbc;
+  }
   &.selected {
     background: #94d7a2;
   }

@@ -9,6 +9,8 @@ const App = () => {
     answers: [],
     correctAnswers: 0,
     done: false,
+    dowloaded: true,
+    keys: [],
   });
 
   React.useEffect(() => {
@@ -21,7 +23,7 @@ const App = () => {
           answers: new Array(data.results.length),
         }));
       });
-  }, []);
+  }, [quiz.dowloaded]);
 
   console.log(quiz);
 
@@ -48,6 +50,19 @@ const App = () => {
       ...prevState,
       correctAnswers: numOfCorrectAnswers,
       done: !prevState.done,
+      keys: prevState.questions.map((item) => item.correct_answer),
+    }));
+  }
+
+  function restart() {
+    setQuiz((prevState) => ({
+      state: false,
+      questions: [],
+      answers: [],
+      correctAnswers: 0,
+      done: false,
+      dowloaded: !prevState.dowloaded,
+      keys: [],
     }));
   }
 
@@ -58,6 +73,8 @@ const App = () => {
       selectAnswer={selectAnswer}
       questionNum={i}
       answers={quiz.answers}
+      correctAnswer={quiz.keys[i]}
+      isDone={quiz.done}
     />
   ));
 
@@ -78,7 +95,9 @@ const App = () => {
             You scored {quiz.correctAnswers} / {quiz.questions.length} correct
             answers
           </p>
-          <button className="btn btn-info">Play Again</button>
+          <button className="btn btn-info" onClick={restart}>
+            Play Again
+          </button>
         </footer>
       )}
     </>

@@ -12,7 +12,7 @@ $color-white: #f5f7fb;
 
 body {
   font-family: 'Karla', sans-serif;
-  height: 100vh;
+  min-height: 100vh;
   background: #f5f7fb;
   background-image: url('./img/left-bottom.png'), url('./img/right-top.png');
   background-repeat: no-repeat, no-repeat;
@@ -117,7 +117,7 @@ body {
     background: #f8bcbc;
   }
   &.selected {
-    background: #94d7a2;
+    background: #94d7a2 !important;
   }
 }
 
@@ -127,6 +127,7 @@ footer {
   justify-content: center;
   align-items: center;
   gap: 10px;
+  padding-bottom: 20px;
 
   p {
     font-family: Inter;

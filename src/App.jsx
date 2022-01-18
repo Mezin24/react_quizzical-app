@@ -1,6 +1,7 @@
 import React from 'react';
 import FirstPage from './components/FirstPage';
 import Question from './components/Question';
+import Confetti from 'react-confetti';
 
 const App = () => {
   const [quiz, setQuiz] = React.useState({
@@ -99,6 +100,12 @@ const App = () => {
             Play Again
           </button>
         </footer>
+      )}
+      {quiz.correctAnswers === quiz.questions.length && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight + window.scrollY}
+        />
       )}
     </>
   );
